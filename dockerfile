@@ -14,7 +14,7 @@ RUN apt-get install nginx -y
 # install openssl packages
 RUN apt-get install -y openssl
 
-# setting up server blocks
+# setting up main server page
 RUN mkdir -p /var/www/localhost/html
 RUN chown -R $USER:$USER /var/www/localhost/html
 COPY srcs/index.html /var/www/localhost/html
@@ -40,13 +40,14 @@ RUN apt-get install mariadb-server -y
 # create mysql database
 RUN service mysql start && \
 	echo "CREATE USER 'qli'@'localhost' IDENTIFIED BY 'server';" | mysql -u root && \
-	echo "GRANT ALL ON mysql_database.* TO 'qli'@'localhost';" | mysql -u root && \
+	echo "GRANT ALL PRIVILEGES ON *.* TO 'qli'@'localhost';" | mysql -u root && \
 	echo "CREATE USER 'pma'@'localhost' IDENTIFIED BY 'pmapass';" | mysql -u root && \
-	echo "GRANT ALL ON mysql_database.* TO 'pma'@'localhost';" | mysql -u root && \
+	echo "GRANT ALL PRIVILEGES ON *.* TO 'pma'@'localhost';" | mysql -u root && \
+	echo "GRANT SELECT, INSERT, DELETE, UPDATE ON phpmyadmin.* TO 'root'@'localhost';" | mysql -u root && \
 	echo "FLUSH PRIVILEGES;" | mysql -u root && \
-	echo "exit" | mysql -u root
+	echo "update mysql.user set plugin = 'mysql_native_password' where user='root';" | mysql -u root
 
-# install & configure PHP
+# install & configure PHP to handle the admin of MySQL
 RUN apt-get install -y php7.3-fpm php7.3-mysql php-json php-mbstring wget
 RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.9.5/phpMyAdmin-4.9.5-english.tar.gz
 RUN tar -zxvf phpMyAdmin-4.9.5-english.tar.gz
@@ -62,6 +63,14 @@ RUN chown -R www-data:www-data /var/www/localhost/html/wordpress/phpMyAdmin
 # run the database in mysql
 RUN service mysql start && \
 	mysql < /var/www/localhost/html/wordpress/phpMyAdmin/sql/create_tables.sql -u root
+
+# download wordpress
+# RUN apt-get install -y sudo
+# RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+# RUN chmod +x wp-cli.phar
+# RUN mv wp-cli.phar /usr/local/bin/wp
+# need to change -> should not download as a root user
+# RUN wp core download --path=wpclidemo.dev --allow-root
 
 # define the port number the container should expose
 # 80 for HTTP && 443 for HTTPS
