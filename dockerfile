@@ -15,10 +15,10 @@ RUN apt-get install nginx -y
 RUN apt-get install -y openssl
 
 # setting up main server page
-RUN mkdir -p /var/www/localhost/html
-RUN chown -R $USER:$USER /var/www/localhost/html
-COPY srcs/index.html /var/www/localhost/html
-COPY srcs/style.css /var/www/localhost/html
+# RUN mkdir -p /var/www/localhost/html
+# RUN chown -R $USER:$USER /var/www/localhost/html
+# COPY srcs/index.html /var/www/localhost/html
+# COPY srcs/style.css /var/www/localhost/html
 
 # generate ssl certificate
 RUN openssl req -x509 \
@@ -51,18 +51,18 @@ RUN service mysql start && \
 RUN apt-get install -y php7.3-fpm php7.3-mysql php-json php-mbstring wget
 RUN wget https://files.phpmyadmin.net/phpMyAdmin/4.9.5/phpMyAdmin-4.9.5-english.tar.gz
 RUN tar -zxvf phpMyAdmin-4.9.5-english.tar.gz
-RUN mkdir /var/www/localhost/html/wordpress
-RUN mv phpMyAdmin-4.9.5-english /var/www/localhost/html/wordpress/phpMyAdmin
+RUN mkdir /var/www/html/wordpress
+RUN mv phpMyAdmin-4.9.5-english /var/www/html/wordpress/phpmyadmin
 RUN rm -f phpMyAdmin-4.9.5-english.tar.gz
-COPY srcs/config.inc.php /var/www/localhost/html/wordpress/phpMyAdmin
-RUN chmod 660 /var/www/localhost/html/wordpress/phpMyAdmin/config.inc.php
-RUN mkdir /var/www/localhost/html/wordpress/phpMyAdmin/tmp
-RUN chmod -R 777 /var/www/localhost/html/wordpress/phpMyAdmin/tmp
-RUN chown -R www-data:www-data /var/www/localhost/html/wordpress/phpMyAdmin
+COPY srcs/config.inc.php /var/www/html/wordpress/phpmyadmin
+RUN chmod 660 /var/www/html/wordpress/phpmyadmin/config.inc.php
+RUN mkdir /var/www/html/wordpress/phpmyadmin/tmp
+RUN chmod -R 777 /var/www/html/wordpress/phpmyadmin/tmp
+RUN chown -R www-data:www-data /var/www/html/wordpress/phpmyadmin
 
 # run the database in mysql
 RUN service mysql start && \
-	mysql < /var/www/localhost/html/wordpress/phpMyAdmin/sql/create_tables.sql -u root
+	mysql < /var/www/html/wordpress/phpmyadmin/sql/create_tables.sql -u root
 
 # download wp-cli
 RUN apt-get install -y sudo
@@ -72,8 +72,8 @@ RUN mv wp-cli.phar /usr/local/bin/wp
 RUN wp cli update
 
 # download wordpress
-RUN chmod -R 775 /var/www/localhost/html/wordpress/
-RUN wp core download --path=/var/www/localhost/html/wordpress/ --allow-root
+RUN chmod -R 755 /var/www/html/wordpress
+RUN wp core download --path=/var/www/html/wordpress/ --allow-root
 
 # install send mail
 # RUN apt-get install -y sendmail
@@ -87,12 +87,12 @@ RUN service mysql start &&\
 #install wordpress
 RUN service mysql start &&\
 	wp config create --dbname=wordpress --dbuser=qli --dbpass=server \
-	--locale=ro_RO --path=/var/www/localhost/html/wordpress/ --allow-root
+	--locale=ro_RO --path=/var/www/html/wordpress/ --allow-root
 RUN service mysql start &&\
-	wp core install --url=localhost/wordpress --title=Testing \
-	--admin_user=qli --admin_password=server --admin_email=info@example.com\
-	--path=/var/www/localhost/html/wordpress/ --allow-root
-RUN chown -R www-data:www-data /var/www/localhost/html/wordpress/
+	wp core install --url=localhost --title=Welcome_to_server \
+	--admin_user=qli --admin_password=server --admin_email=qli@student.codam.nl\
+	--path=/var/www/html/wordpress/ --allow-root
+RUN chown -R www-data:www-data /var/www/html/wordpress/
 
 # define the port number the container should expose
 # 80 for HTTP && 443 for HTTPS
