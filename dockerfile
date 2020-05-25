@@ -67,10 +67,6 @@ RUN chmod +x wp-cli.phar
 RUN mv wp-cli.phar /usr/local/bin/wp
 RUN wp cli update
 
-# download wordpress
-RUN chmod -R 755 /var/www/html/wordpress/
-RUN wp core download --path=/var/www/html/wordpress/ --allow-root
-
 # install send mail
 RUN apt-get install -y sendmail
 RUN echo "127.0.0.1 localhost localhost.localdomain" >> /etc/hosts
@@ -80,6 +76,10 @@ RUN service mysql start &&\
 	echo "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;" | mysql -u root && \
 	echo "GRANT ALL ON wordpress.* TO 'qli'@'localhost' IDENTIFIED BY 'server';" | mysql -u root &&\
 	echo "FLUSH PRIVILEGES;" | mysql -u root
+
+# download wordpress
+RUN chmod -R 755 /var/www/html/wordpress/
+RUN wp core download --path=/var/www/html/wordpress/ --allow-root
 
 #install wordpress
 RUN service mysql start &&\
