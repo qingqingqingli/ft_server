@@ -8,11 +8,8 @@ LABEL MAINTAINER="qli"
 # update packages
 RUN apt-get update && apt-get upgrade -y
 
-# install Nginx
-RUN apt-get install nginx -y
-
-# install openssl packages
-RUN apt-get install -y openssl
+# install Nginx & openssl
+RUN apt-get install -y nginx openssl
 
 # generate ssl certificate
 RUN openssl req -x509 \
@@ -61,11 +58,9 @@ RUN service mysql start && \
 	mysql < /var/www/html/wordpress/phpmyadmin/sql/create_tables.sql -u root
 
 # download wp-cli
-RUN apt-get install -y sudo
 RUN wget -c https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 RUN chmod +x wp-cli.phar
 RUN mv wp-cli.phar /usr/local/bin/wp
-RUN wp cli update
 
 # install send mail
 RUN apt-get install -y sendmail
@@ -79,6 +74,7 @@ RUN service mysql start &&\
 
 # download wordpress
 RUN chmod -R 755 /var/www/html/wordpress/
+RUN chown -R www-data:www-data /var/www/html/wordpress/
 RUN wp core download --path=/var/www/html/wordpress/ --allow-root
 
 #install wordpress
@@ -89,6 +85,7 @@ RUN service mysql start &&\
 	wp core install --url=localhost --title=Welcome_to_server \
 	--admin_user=qli --admin_password=server --admin_email=amy_liqing@hotmail.com\
 	--path=/var/www/html/wordpress/ --allow-root
+RUN chmod 660 /var/www/html/wordpress/wp-config.php
 RUN chown -R www-data:www-data /var/www/html/wordpress/
 
 # define the port number the container should expose
