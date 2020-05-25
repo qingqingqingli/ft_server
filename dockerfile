@@ -35,7 +35,7 @@ COPY srcs/nginx.conf /etc/nginx/sites-available/localhost
 RUN ln -s /etc/nginx/sites-available/localhost /etc/nginx/sites-enabled
 
 # install MySQL to store & manage site data
-RUN apt-get install mariadb-server -y
+RUN apt-get install mariadb-server mariadb-client -y
 
 # create mysql database
 RUN service mysql start && \
@@ -72,14 +72,27 @@ RUN mv wp-cli.phar /usr/local/bin/wp
 RUN wp cli update
 
 # download wordpress
-RUN chmod -R 777 /var/www/localhost/html/wordpress/
-RUN wp core download --locale=nl_NL --path=/var/www/localhost/html/wordpress/ --allow-root
+RUN chmod -R 775 /var/www/localhost/html/wordpress/
+RUN wp core download --path=/var/www/localhost/html/wordpress/ --allow-root
+
+# install send mail
+# RUN apt-get install -y sendmail
 
 # create a new user & database
-# RUN service mysql start &&\
-# 	echo "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;" | mysql -u root && \
-# 	echo "GRANT ALL ON wordpress.* TO 'qli'@'localhost' IDENTIFIED BY 'server';" | mysql -u root &&\
-# 	echo "FLUSH PRIVILEGES;" | mysql -u root
+RUN service mysql start &&\
+	echo "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;" | mysql -u root && \
+	echo "GRANT ALL ON wordpress.* TO 'qli'@'localhost' IDENTIFIED BY 'server';" | mysql -u root &&\
+	echo "FLUSH PRIVILEGES;" | mysql -u root
+
+#install wordpress
+RUN service mysql start &&\
+	wp config create --dbname=wordpress --dbuser=qli --dbpass=server \
+	--locale=ro_RO --path=/var/www/localhost/html/wordpress/ --allow-root
+RUN service mysql start &&\
+	wp core install --url=localhost/wordpress --title=Testing \
+	--admin_user=qli --admin_password=server --admin_email=info@example.com\
+	--path=/var/www/localhost/html/wordpress/ --allow-root
+RUN chown -R www-data:www-data /var/www/localhost/html/wordpress/
 
 # define the port number the container should expose
 # 80 for HTTP && 443 for HTTPS
