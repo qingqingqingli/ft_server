@@ -14,12 +14,6 @@ RUN apt-get install nginx -y
 # install openssl packages
 RUN apt-get install -y openssl
 
-# setting up main server page
-# RUN mkdir -p /var/www/localhost/html
-# RUN chown -R $USER:$USER /var/www/localhost/html
-# COPY srcs/index.html /var/www/localhost/html
-# COPY srcs/style.css /var/www/localhost/html
-
 # generate ssl certificate
 RUN openssl req -x509 \
 	-nodes -days 365 -newkey rsa:2048 \
@@ -55,6 +49,8 @@ RUN mkdir /var/www/html/wordpress
 RUN mv phpMyAdmin-4.9.5-english /var/www/html/wordpress/phpmyadmin
 RUN rm -f phpMyAdmin-4.9.5-english.tar.gz
 COPY srcs/config.inc.php /var/www/html/wordpress/phpmyadmin
+RUN cd /etc/php/7.3/fpm && \
+	sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 20M/g' php.ini
 RUN chmod 660 /var/www/html/wordpress/phpmyadmin/config.inc.php
 RUN mkdir /var/www/html/wordpress/phpmyadmin/tmp
 RUN chmod -R 777 /var/www/html/wordpress/phpmyadmin/tmp
@@ -72,11 +68,12 @@ RUN mv wp-cli.phar /usr/local/bin/wp
 RUN wp cli update
 
 # download wordpress
-RUN chmod -R 755 /var/www/html/wordpress
+RUN chmod -R 755 /var/www/html/wordpress/
 RUN wp core download --path=/var/www/html/wordpress/ --allow-root
 
 # install send mail
-# RUN apt-get install -y sendmail
+RUN apt-get install -y sendmail
+RUN echo "127.0.0.1 localhost localhost.localdomain" >> /etc/hosts
 
 # create a new user & database
 RUN service mysql start &&\
@@ -90,16 +87,21 @@ RUN service mysql start &&\
 	--locale=ro_RO --path=/var/www/html/wordpress/ --allow-root
 RUN service mysql start &&\
 	wp core install --url=localhost --title=Welcome_to_server \
-	--admin_user=qli --admin_password=server --admin_email=qli@student.codam.nl\
+	--admin_user=qli --admin_password=server --admin_email=amy_liqing@hotmail.com\
 	--path=/var/www/html/wordpress/ --allow-root
 RUN chown -R www-data:www-data /var/www/html/wordpress/
 
 # define the port number the container should expose
 # 80 for HTTP && 443 for HTTPS
-EXPOSE 80 443
+EXPOSE 80 443 110
 
 # run the command
 CMD service nginx start &&\
-	service mysql restart &&\
+	service mysql start &&\
 	service php7.3-fpm start &&\
+	service sendmail start &&\
 	bash
+
+# NOTES: Turn autoindex off in interactive mode: 
+# cd /etc/nginx/sites-available/ && sed -i 's/autoindex on/autoindex off/g' localhost
+# service nginx restart/
