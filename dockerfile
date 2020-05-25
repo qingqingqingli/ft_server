@@ -64,13 +64,22 @@ RUN chown -R www-data:www-data /var/www/localhost/html/wordpress/phpMyAdmin
 RUN service mysql start && \
 	mysql < /var/www/localhost/html/wordpress/phpMyAdmin/sql/create_tables.sql -u root
 
+# download wp-cli
+RUN apt-get install -y sudo
+RUN wget -c https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
+RUN wp cli update
+
 # download wordpress
-# RUN apt-get install -y sudo
-# RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-# RUN chmod +x wp-cli.phar
-# RUN mv wp-cli.phar /usr/local/bin/wp
-# need to change -> should not download as a root user
-# RUN wp core download --path=wpclidemo.dev --allow-root
+RUN chmod -R 777 /var/www/localhost/html/wordpress/
+RUN wp core download --locale=nl_NL --path=/var/www/localhost/html/wordpress/ --allow-root
+
+# create a new user & database
+# RUN service mysql start &&\
+# 	echo "CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;" | mysql -u root && \
+# 	echo "GRANT ALL ON wordpress.* TO 'qli'@'localhost' IDENTIFIED BY 'server';" | mysql -u root &&\
+# 	echo "FLUSH PRIVILEGES;" | mysql -u root
 
 # define the port number the container should expose
 # 80 for HTTP && 443 for HTTPS
