@@ -47,7 +47,9 @@ RUN mv phpMyAdmin-4.9.5-english /var/www/html/wordpress/phpmyadmin
 RUN rm -f phpMyAdmin-4.9.5-english.tar.gz
 COPY srcs/config.inc.php /var/www/html/wordpress/phpmyadmin
 RUN cd /etc/php/7.3/fpm && \
-	sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 20M/g' php.ini
+	sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 20M/g' php.ini &&\
+	sed -i 's/post_max_size = 8M/post_max_size = 20M/g' php.ini &&\
+	sed -i 's/max_execution_time = 30/max_execution_time = 300/g' php.ini
 RUN chmod 660 /var/www/html/wordpress/phpmyadmin/config.inc.php
 RUN mkdir /var/www/html/wordpress/phpmyadmin/tmp
 RUN chmod -R 777 /var/www/html/wordpress/phpmyadmin/tmp
