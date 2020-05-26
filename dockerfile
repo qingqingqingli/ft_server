@@ -102,4 +102,7 @@ CMD service nginx start &&\
 
 # NOTES: Turn autoindex off in interactive mode: 
 # cd /etc/nginx/sites-available/ && sed -i 's/autoindex on/autoindex off/g' localhost
-# service nginx restart/
+# service nginx restart
+
+# NOTES: Create a new wordpress user via command line: 
+# wp user create username emailaddress@hioh.com --allow-root --path=/var/www/html/wordpress/
