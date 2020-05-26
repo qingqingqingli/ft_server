@@ -85,7 +85,6 @@ RUN service mysql start &&\
 	wp core install --url=localhost --title=Welcome_to_server \
 	--admin_user=qli --admin_password=server --admin_email=amy_liqing@hotmail.com\
 	--path=/var/www/html/wordpress/ --allow-root
-RUN chmod 660 /var/www/html/wordpress/wp-config.php
 RUN chown -R www-data:www-data /var/www/html/wordpress/
 
 # define the port number the container should expose

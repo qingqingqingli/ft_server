@@ -159,5 +159,5 @@ $cfg['DefaultLang'] = 'en';
 $cfg['PmaNoRelation_DisableWarning'] = TRUE;
 
 # to create a temp folder to allow for ca
-$cfg['TempDir'] = '/var/www/html/wordpress/phpMyAdmin/tmp';
+$cfg['TempDir'] = '/var/www/html/wordpress/phpmyadmin/tmp';
 
