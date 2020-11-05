@@ -3,4 +3,4 @@
 </p>
 
 ## ft_server
-*** This is a System Administration project. The aim is to discover Docker and set up a web server. ***
+***This is a System Administration project. The aim is to discover Docker and set up a web server.***
