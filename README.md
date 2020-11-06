@@ -35,3 +35,6 @@ password = server
 ```
 
 ## Examples
+
+- The installation process can take a few minutes
+![ft_server_example_1](https://github.com/qingqingqingli/readme_images/blob/master/ft_server_1.png)
