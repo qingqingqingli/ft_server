@@ -40,18 +40,18 @@ password = server
 
 ![ft_server_1](https://github.com/qingqingqingli/readme_images/blob/master/ft_server_1.png)
 
-- Run docker image
+- **Run docker image**
 
 ![ft_server_2](https://github.com/qingqingqingli/readme_images/blob/master/ft_server_2.png)
 
-- Wordpress
+- **Wordpress**
 
 ![ft_server_wordpress](https://github.com/qingqingqingli/readme_images/blob/master/ft_server_wordpress.png)
 
-- PhpMyAdmin
+- **PhpMyAdmin**
 
 ![ft_server_pma_0](https://github.com/qingqingqingli/readme_images/blob/master/ft_server_pma_0.png)
 
-- MySQL Wordpress database
+- **MySQL Wordpress database**
 
 ![ft_server_pma_2](https://github.com/qingqingqingli/readme_images/blob/master/ft_server_pma_2.png)
