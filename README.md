@@ -36,7 +36,7 @@ password = server
 
 ## Examples
 
-- The process to build the docker image can take a few minutes
+- **The process to build the docker image can take a few minutes**
 
 ![ft_server_1](https://github.com/qingqingqingli/readme_images/blob/master/ft_server_1.png)
 
