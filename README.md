@@ -23,13 +23,13 @@ $ docker run -it -p 80:80 -p 443:443 ft_server
 > Wordpress can be accessed with
 
 ```shell
-[https://localhost](https://localhost)
+https://localhost
 ```
 
 > Phpmyadmin can be accessed with
 
 ```shell
-[https://localhost/phpmyadmin](https://localhost/phpmyadmin)
+https://localhost/phpmyadmin
 username = qli
 password = server
 ```
