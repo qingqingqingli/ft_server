@@ -5,10 +5,10 @@
 
 ## Technical considerations
 
-- Docker-compose is not allowed
-- Container OS must be debian buster
-- The server needs to use the SSL protocol
-- The server redirects to the correct website based on the url
+- ```Docker-compose``` is not allowed
+- Container OS must be ```debian buster```
+- The server needs to use the ```SSL``` protocol
+- The server ```redirects``` to the correct website based on the url
 
 ## How to test
 > Run the following commands
