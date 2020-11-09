@@ -1,7 +1,9 @@
 [![Logo](https://github.com/qingqingqingli/readme_images/blob/master/codam_logo_1.png)](https://github.com/qingqingqingli/ft_server)
 
 # ft_server
-***This is a System Administration project. It demonstrates the importance of using scripts to automate tasks. This project uses Docker technology to set up a web server, which will run multiple services (```Wordpress```, ```PhpMyAdmin```, ```MySQL```).***
+***This is a System Administration project. This project uses Docker technology to set up a web server, which will run multiple services (```Wordpress```, ```PhpMyAdmin```, ```MySQL```).***
+
+The project also demonstrates the importance of using scripts to automate tasks. 
 
 ## Technical considerations
 
