@@ -20,13 +20,13 @@ $ docker build -t ft_server .
 $ docker run -it -p 80:80 -p 443:443 ft_server
 ```
 
-> Wordpress can be accessed with
+> Wordpress can be accessed at
 
 ```shell
 https://localhost
 ```
 
-> Phpmyadmin can be accessed with
+> Phpmyadmin can be accessed at
 
 ```shell
 https://localhost/phpmyadmin
